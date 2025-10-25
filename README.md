@@ -149,6 +149,7 @@ Proyek ini dilisensikan di bawah ketentuan lisensi yang disediakan dalam reposit
 - [Rama Diaz](https://github.com/ramadiaz) - Backend Developer
 - [Fahry Firdaus](https://github.com/Fahry169) - Frontend Developer
 - [Kevin Sipahutar](https://github.com/vinss-droid) - Frontend Developer
+- [Rivo Juniandra](https://github.com/Leon24k) - Machine Learning Developer
 
 ---
 
