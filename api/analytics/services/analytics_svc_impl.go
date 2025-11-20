@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"ragamaya-api/api/analytics/dto"
 	"ragamaya-api/api/analytics/repositories"
 	"ragamaya-api/models"
 	"ragamaya-api/pkg/cache"
 	"ragamaya-api/pkg/exceptions"
+	"ragamaya-api/pkg/logger"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -94,15 +94,15 @@ func (s *CompServicesImpl) getAndCacheAnalytics(ctx context.Context) (*dto.Analy
 		AnalyticRevenue:  *revenueAnalytics,
 		AnalyticPlatform: *platformAnalytics,
 	}
-
-	data, exc := json.Marshal(analytics)
-	if exc != nil {
-		return nil, exceptions.NewException(http.StatusInternalServerError, "Failed to marshal analytics data")
-	}
-
-	if err := s.cache.Set(ctx, analyticsCacheKey, data, cacheDuration); err != nil {
-		return nil, exceptions.NewException(http.StatusInternalServerError, "Failed to cache analytics data")
-	}
+	go func() {
+		data, exc := json.Marshal(analytics)
+		if exc != nil {
+			logger.Error("Failed to marshal analytics data: %v", exc)
+		}
+		if err := s.cache.Set(ctx, analyticsCacheKey, data, cacheDuration); err != nil {
+			logger.Error("Failed to cache analytics data: %v", err)
+		}
+	}()
 
 	return analytics, nil
 }
